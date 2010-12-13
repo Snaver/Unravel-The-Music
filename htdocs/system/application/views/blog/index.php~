@@ -1,0 +1,53 @@
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds2.feedburner.com/UnravelTheMusic" />
+<h1 class="blogHeader">Unravel Offical Blog</h1><br />
+<span class="blogLinksRight">
+Subscribe
+</span>
+<?=anchor('blog/archives/', 'Archives', array('class' => 'blogLink'))?> |
+<?=anchor('blog/categories/', 'Categories', array('class' => 'blogLink'))?>
+<hr class="blogHr" />
+<?php
+		foreach($results->result() as $row)
+		{
+			?>
+				<div class="blogPostHeader">
+					<div class="blogPostTitle">
+						<h1><?=anchor('blog/view/' . $row->post_id, $row->title, array('class' => 'blogHeader'))?></h1>
+					</div>
+					<?php
+						$date = $row->created_on;
+						$day = date("d", strtotime($date));
+						$month = date('M', strtotime($date));
+						$year = date('Y', strtotime($date));
+					?>
+					<div class="blogPostDate">
+						<span class="blogPostYear">
+							<?=$month?><br /><?=$year?>
+						</span>
+						<span class="blogPostDivider">
+							|
+						</span>
+						<span class="blogPostDay">
+							<?=$day?>
+						</span>
+					</div>
+				</div>
+				<div class="blogPost">
+					<?=$row->summary?>
+				</div>
+				<div class="blogPostFooter">
+					<p class="blogCategory">In: <?=anchor('blog/categories/' . $row->category, $row->category, array('class' => 'blogPostCategory'))?></p>
+					<span class="blogLinksRight">
+						<?=anchor('blog/view/' . $row->post_id, 'Read More', array('class' => 'blogLink')?> <?=anchor('blog/view/' . $row->post_id . '#comments', 'Comments', array('class' => 'blogLink')?>
+					</span>
+				</div>
+			<br /><br />
+			<?php
+		}
+
+?>
+<p><a href="http://feeds2.feedburner.com/UnravelTheMusic"><img src="http://feeds2.feedburner.com/~fc/UnravelTheMusic?bg=FFFFFF&amp;fg=444444&amp;anim=0" height="26" width="88" style="border:0" alt="" /></a></p>
+<p><a href="http://fusion.google.com/add?feedurl=http://feeds2.feedburner.com/UnravelTheMusic"><img src="http://buttons.googlesyndication.com/fusion/add.gif" width="104" height="17" style="border:0" alt="Add to Google Reader or Homepage"/></a></p>
+<p><a href="http://add.my.yahoo.com/rss?url=http://feeds2.feedburner.com/UnravelTheMusic" title="Unravel The Music Official Blog"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/my/addtomyyahoo4.gif" alt="" style="border:0"/></a></p>
+<p><a href="http://www.bloglines.com/sub/http://feeds2.feedburner.com/UnravelTheMusic" title="Unravel The Music Official Blog" type="application/rss+xml"><img src="http://www.bloglines.com/images/sub_modern11.gif" alt="Subscribe in Bloglines" style="border:0"/></a></p>
+<a href="http://technorati.com/faves?sub=addfavbtn&amp;add=http://www.unravelthemusic.com/blog"><img src="http://static.technorati.com/pix/fave/tech-fav-1.png" alt="Add to Technorati Favorites" /></a>

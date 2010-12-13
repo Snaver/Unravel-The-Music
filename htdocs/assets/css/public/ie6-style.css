@@ -1,0 +1,72 @@
+div#right {margin-left: 15px;}
+
+.artistPic, .userPic{ behavior: url(http://www.unravelthemusic.com/assets/css/public/iepngfix.htc) }
+
+a:link.rightLinkSmall {
+	color: #444;
+	font-size: 10px;
+	position: static;
+}
+
+a:visited.rightLinkSmall {
+	color: #444;
+	font-size: 10px;
+	position: static;	
+}
+
+a:hover.rightLinkSmall {
+	color: #416cb4;
+	font-size: 10px;
+	position: static;
+}
+.artistPic {
+	width: 90px;
+	height: 90px;
+	overflow: hidden;
+	display: block;
+	background: #fff;
+	border: 1px solid #b4b4b5;
+	padding: 1px;
+	background-repeat: no-repeat;
+	margin-left: 0px;
+	margin-top: 0px;
+	position: static;
+	z-index: 1;
+
+}
+#rightSearch, #popularJournals, #rightTopArtists, #rightNewUsers, #mostDiscussed {
+	width: 300px;
+	margin-top: 10px;
+	padding-left: 10px;
+	padding-right: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+hr.rightHr {
+	height: 1px;
+	color: #cee7cb;
+	background-color: #cee7cb;
+	border: 0px;
+	margin-left: -10px;
+	width: 322px;
+	margin-top: -3px;
+	margin-bottom: 2px;
+}
+#loginContainer {
+	width: 334px;
+	padding-left: 305px;
+	padding-top: 34px;
+	display: inline-block;
+}
+.loginButton {
+	background-image: url(../../images/public/loginbtn.png);
+	width: 46px;
+	margin-left: 5px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	height: 23px;
+	display: inline-block;
+	float: right;
+	
+}

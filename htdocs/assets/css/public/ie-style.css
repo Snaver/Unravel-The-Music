@@ -1,0 +1,17 @@
+hr.topTracksHr {
+margin-top: -7px;
+}
+h2, h2.right {
+	margin-bottom: -3px;
+}
+
+.artistTable, .userTable, .favoritesTable {
+	margin-top: -8px; 
+	padding-top: -2px;
+}
+.tags {
+	display: inline;
+}
+h3.artistName, h3, h2 {
+	display: inline;
+}

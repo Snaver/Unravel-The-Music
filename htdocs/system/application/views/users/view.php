@@ -1,0 +1,118 @@
+<div id="userContainer">
+	<div id="userLeft">
+		<?php		if($avatar != '')		{			$img['src'] = 'http://static.unravelthemusic.com/users/' . $avatar;		} else {			$img['src'] = 'http://www.unravelthemusic.com/assets/images/public/blank_user.png';		}
+		$img['class'] = 'userImage';		?>	
+		<?=img($img)?>
+		<?='<p class="userName">' . $username . '</p>'?>
+		<ul class="userMenu">	
+			<?php
+			if($friends)
+			{
+				echo '<li class="tag">', anchor('#', 'Untag', array('class' => 'untagUser', 'id' => $userId)), '</li>';
+			} else {
+				echo '<li class="tag">', anchor('#', 'Tag', array('class' => 'tagUser', 'id' => $userId)), '</li>';
+			}		
+			if($blocked)
+			{
+				echo '<li class="block">', anchor('#', 'Unblock', array('class' => 'unblockUser', 'id' => $username)), '</li>';	
+			} else {
+				echo '<li class="block">', anchor('#', 'Block', array('class' => 'blockUser', 'id' => $username)), '</li>';
+			}
+			?>
+			<li class="report"><?=anchor('#', 'Report', array('class' => 'reportUser', 'id' => $username))?></li>		
+			<li class="karma"><?=$karma?> Karma</li>
+			<?php
+			if($edit != NULL)
+			{
+				echo('<li class="edit">' . $edit . '</li>');		
+			}
+			?>
+			
+		</ul>
+		<br clear="both" />
+	</div>
+	<div id="userRight">
+		<h1 class='userHeader'><?=$username?></h1>
+		<span class="userBio"><?=$bio?></span><br />
+		<table style="margin-bottom: 20px;">
+			<tr>
+				<td style="width: 80px;">
+					<span class="userInfo">Website: </span>
+				</td>		
+				<td>
+					<a href="<?=$website?>"><?=$website?></a>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 80px;">
+					<span class="userInfo">Interests: </span>
+				</td>		
+				<td>
+					<?=$interests?>
+				</td>			
+			</tr>		
+		</table>
+		<hr class="userHr" />
+	
+	<h2 class="userHeader">Latest Journal Entry</h2> -- <?=anchor('journals/view/' . $username, 'View all by ' . $username)?>
+	<?php
+	if($journal != NULL)
+	{	
+	?>
+		<br /><h1 class="userHeader"><?=$journal->title?></h1><br />
+		<?php
+		$createdOn = date("M jS, Y", strtotime($journal->created_on));
+		?>
+		<p class="userJournalDate">on <?=$createdOn?></p>
+		<div class="userJournalBody">
+			<?=substr($journal->body,0, 600)?><?=anchor('journals/view/' . $journal->user . '/' . $journal->journal_id, 'More...')?>
+			</p>
+		</div>
+		<?php
+		$shareBtn = array(
+				'src' => 'http://www.unravelthemusic.com/assets/images/public/share_btn.png',
+				'class' => 'imgButtons'
+				);
+		$emailBtn = array(
+				'src' => 'http://www.unravelthemusic.com/assets/images/public/email_this_btn.png',
+				'class' => 'imgButtons'			
+				);
+		$commentsBtn = array(
+				'src' => 'http://www.unravelthemusic.com/assets/images/public/comments_btn.png',
+				'class' => 'imgButtons'
+				);				
+		?>
+		<div class="userShare">
+			<?=img($shareBtn)?>Share <?=img($emailBtn)?>Email This <?=img($commentsBtn)?>Comments (<?=$journal->totalComments?>)	
+		</div>
+	<?php
+	} else {
+		echo('<br /><br />This user doesn\'t have any journals posts yet<br /><br />Let them know you want them to post one!');
+	}
+	?>
+	<hr class="userHr" />
+	<h2 class="userHeader">Latest Comments</h2> -- <?=anchor('users/comments/' . $username, 'View all by ' . $username)?>
+	<div class="userJournalBody">
+	<?php
+	if($comments != NULL)
+	{
+		foreach($comments->result() as $comment)
+		{
+			$karma = $comment->rating_up - $comment->rating_down;
+			if($karma > 0)
+			{
+				$karma = '<span class="green">' . $karma . '</span>';
+			} else if ($karma < 0) {
+				$karma = '<span class="red">' . $karma . '</span>';
+			}		
+		
+			echo '<span class="userKarmaRight">', '<span class="userJournalDate">Karma: </span>', $karma, '</span><h3>', $comment->title, '</h3>';
+			echo '<p class="userJournalDate">in "', $comment->song, '" by ', $comment->artist, ' on ', date("M jS, Y", strtotime($comment->created_on)), '</p>';
+			echo '<p class="userCommentBody">', rtrim(substr($comment->body, 0, strpos($comment->body, " ", 110)), ','), ' ', anchor('songs/view/' . $comment->artist_seo_name . '/' . $comment->album_seo_name . '/' . $comment->song_seo_name . '#' . $comment->meaning_id, 'Context...'), '</p>';
+			echo '<p class="userCommentDiv">• • • • • • • • • • • •</p>';	
+		}
+	}
+	?>
+	</div>
+	</div>
+</div>

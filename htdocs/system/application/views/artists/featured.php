@@ -1,0 +1,280 @@
+<?php
+
+	echo('<div class="featuredArtistInfo">');	
+		
+		if ($picVerified == 1)
+		{
+			$artistPic = array(
+						'src' => "http://static.unravelthemusic.com/artists/" . $artistPicture,
+						'class' => 'featuredArtistPic',
+					);
+			echo('<div class="featuredPic">' . img($artistPic) . '</div>'); //anchor('spotlight/photos/' . $artist_seo_name, 'Photo Gallery') .'</div>');
+		} else {
+			$artistPic = array(
+						'src' => base_url() . 'assets/images/public/blank_artist.png',
+						'class' => 'artistPic',
+						'align' => 'right'
+					);
+			echo(img($artistPic));		
+		}
+		echo('<span class="spotlightBadge"><img src="http://www.unravelthemusic.com/assets/images/public/spotlight_mag.png" class="spotlightBadgeImg"/>Spotlight Artist</span>');
+		$tagArtist = "<span class='tagArtist' id='" . $artist_seo_name . "' ></span>";
+		$tagArtist2 = "<span class='tagArtist' id='" . $artist_seo_name . "' style='display:none'></span>";
+		$untagArtist = "<span class='untagArtist' id='" . $artist_seo_name . "'></span>";
+		$untagArtist2 = "<span class='untagArtist' style='display:none' id='" . $artist_seo_name . "'></span>";
+		echo("<h3 class='artistName'>" . anchor('artists/view/' . $artist_seo_name, $artist) . "</h3>");		
+		/*
+		if($watching == false)
+		{					
+			echo(<div class='tags'>" . $tagArtist . $untagArtist2. "</div><br />");
+		} else {	  	
+			echo("<div class='tags'>" . $untagArtist . $tagArtist2 . "</div><br />");
+		}
+		*/
+		if($this->dx_auth->is_logged_in())
+		{
+			if($artistPicture == null || $picVerified == -1)
+			{
+				$upload = array(
+					'src' => base_url() . 'assets/images/public/add_artist_image.png',
+					'class' => 'viewalltracksImg'
+					);
+				?>
+				<a href="/#" class="showForm"><?=img($upload)?></a>
+				<div class="uploadFormHidden">
+				
+					<?php echo form_open_multipart('artists/upload_picture/'. $artist_seo_name);?>
+
+						<input type="file" name="userfile" size="20" />
+
+						<br />
+
+						<input type="submit" value="upload" />
+
+					</form>
+				</div>
+		 
+				<?php 
+			}
+		}
+		$webTitle = NULL;
+		$websites = NULL;
+		echo('<div class="infoSubWrapper">');
+			if($web1 != '')
+			{
+				if($web1 != '')
+				{
+					$websites = anchor($web1);
+					$webTitle = 'Website: ';
+				}
+				if($web2 != '')
+				{
+					$websites .= '<br />' . anchor($web2);
+					$webTitle = 'Websites: ';
+				}
+				if($web3 != '')
+				{
+					$websites .= '<br />' . anchor($web3);
+				}			
+			}
+			echo('<div class="infoSubLeft">' . $webTitle . '</div>');
+			echo('<div class="infoSubRight">' . $websites . '</div>');
+			echo('<br /><br /><div class="infoSubLeft">Influences:</div><div class="infoSubRight">' . $influences . '</div>');
+			?>
+		</div>
+	</div>
+	<hr class="featuredHr" />
+	<div class="bioFeature">
+		<h2>Biography</h2> -- <?=anchor('spotlight/bio/' . $artist_seo_name, 'Read All', array('class' => 'featuredLink'))?>
+		<br /><?=$bio?>
+	</div>
+	<hr class="featuredHr" />
+	<div class="interviewFeature">
+		<h2>Interview</h2> -- <?=anchor('spotlight/interview/' . $artist_seo_name, 'Read All', array('class' => 'featuredLink'))?>
+		<br /><?=$interview?>
+	</div>
+	<hr class="featuredHr" />
+	<h2 class="albumFeature">Albums</h2> -- <?=anchor('spotlight/albums/' . $artist_seo_name, 'View All', array('class' => 'featuredLink'))?>
+	<?php
+	$addAlbumImage = array(
+			'src' => base_url() . 'assets/images/public/add.png',
+			'class' => 'addAlbumImg'
+		);
+	?>
+	<table class='featuredTable'>
+	<tr class="featuredAlbumHeader">
+		<td>Album</td>
+		<td>Song Title</td>
+		<td>Amazon</td>
+	</tr>
+	<tr>
+		<td class="featuredAlbum" rowspan="<?=$songs->num_rows()?>">
+			<?php
+				$noAlbumCover = base_url() . 'assets/images/public/blank_album.png';
+				$album = $query->row();
+				if($album->album_picture_verified == 1) {
+					$filename = substr($album->album_picture, 0, -4);
+					$extension = substr($album->album_picture, -4);
+
+					$albumPicture = $filename . '_thumb' . $extension;
+					echo anchor('albums/view/' . $album->artist_seo_name . "/" . $album->album_seo_name,  '<img src="http://static.unravelthemusic.com/albums/' . $albumPicture . '" class="featuredAlbumPic" />');
+				} else {
+					echo anchor('albums/view/' . $album->artist_seo_name . "/" . $album->album_seo_name,  '<img src="' . $noAlbumCover . '" class="featuredAlbumPic"  align="left" />');
+					
+				}
+					echo '<br />' . anchor('albums/view/' . $album->artist_seo_name . "/" . $album->album_seo_name, $album->album, array('class' => 'featuredAlbumTitle'));
+					echo anchor('artists/view/' . $album->artist_seo_name, $album->artist, array('class' => 'featuredAlbumArtist'));
+				?>		</td>
+		<?php
+		$i = 0;
+		
+
+		foreach($songs->result() as $song)
+		{
+			if($i != 0)
+			{
+				echo('<tr>');
+			}
+			if($i % 2 == 0)
+			{
+				echo('<td class="featuredSongRow">');
+			} else {
+				echo('<td class="featuredSongRowOdd">');
+			}
+			echo(anchor('songs/view/' . $album->artist_seo_name . '/' . $album->album_seo_name . '/' . $song->song_seo_name, $song->song, array('class' => 'featuredSong')));
+			
+			if($song->song_ASIN != NULL)
+			{
+				$amazon = "<a href='http://www.amazon.com/gp/product/$song->song_ASIN?ie=UTF8&tag=unrthemus-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=$song->song_ASIN'><img src='http://www.unravelthemusic.com/assets/images/public/amazon.png' class='amazonImg' /></a>";
+			} else {
+				$amazon = NULL;
+			}
+			if($i % 2 == 0)
+			{			
+				echo('</td><td class="featuredSongRowAm">' . $amazon);
+			} else {
+				echo('</td><td class="featuredSongRowOddAm">' . $amazon);
+			}
+			echo('</td></tr>');
+			$i++;
+		
+		}
+		
+		?>
+		</table>
+		<hr class="featuredHr" />
+		<table class="tourTable">
+			<tr>
+				<th colspan="2" class="tourHeader">
+					<?=$artist?>'s Tour Dates
+				</th>			
+			</tr>		
+		
+
+
+			<?php
+			foreach($dates->result() as $date)
+			{
+				echo('<tr>');
+					echo('<td class="tourDate">' . date('F dS Y', strtotime($date->date)) . '</td>');
+					echo('<td class="tourLocation">' . $date->location . '<br /><span class="tourVenue">' . $date->venue . '</span>' . '</td>');
+				echo('</tr>');
+			
+			}
+			?>
+		</table><hr class="featuredHr" />
+	<?php
+
+		if(!empty($similarArtists))
+		{
+			?>
+			<br clear="both" />
+			<h2 class="body">Similar Artists</h2>
+			<div class="albumHolder">
+				<?php
+				
+				if ($random == 0)
+				{
+						echo("<div class='albumBlock'>");
+						
+						if($similarArtists[0]['picture'] != null)
+						{
+							echo ("<img src=http://static.unravelthemusic.com/artists/" . $similarArtists[0]['picture'] . ' class="similarPics" />');
+						}
+						echo('<br />' . anchor('artists/view/' . url_title($similarArtists[0]['artist']), $similarArtists[0]['artist'], array('class' => 'albumName')));
+						echo("</div>");
+									
+					
+					
+				} else {
+					foreach($random as $element)
+					{
+						echo("<div class='albumBlock'>");
+						if($similarArtists[$element]['picture'] != null)
+						{
+							$picture = array(
+									'src' => "http://static.unravelthemusic.com/artists/" . $similarArtists[$element]['picture'],
+									'class' => 'similarPics',
+									'width' => '100',
+									'height' => '100'
+								);
+							echo (anchor('artists/view/' . url_title($similarArtists[$element]['artist']),  img($picture)));
+						} else {
+							echo (anchor('artists/view/' . url_title($similarArtists[$element]['artist']), "<img src='http://www.unravelthemusic.com/assets/images/public/blank_artist.png' class='similarPics'/>"));
+							
+						}
+						echo('<br />' . anchor('artists/view/' . url_title($similarArtists[$element]['artist']), $similarArtists[$element]['artist'], array('class' => 'albumName')));
+						
+						echo("</div>");
+					}
+				}
+			?></div><br clear="both" /><?php
+		}
+	?>
+	<h2 class="body">Top Tracks</h2>
+	<div class="subNavTracks">
+		<div class="thisMonthTab">
+			<?=anchor('/#', 'This Month', array('class' => 'thisMonthTabActive'))?>
+		</div>
+		<div class="allTimeTab">
+			<?=anchor('/#', 'All-Time', array('class' => 'allTimeTabInactive'))?>
+		</div>
+		
+	</div>
+	<hr class="topTracksHr" />
+	<div class="topMonth">
+		<table class="topMonthList">
+		
+			<?php
+			foreach($topMonth->result() as $top)
+			{
+				echo('<tr class="topList"><td>' . anchor('songs/view/' . $artist_seo_name . '/' . $top->album_seo_name . '/' . $top->song_seo_name, $top->song) . ', on ' . anchor('albums/view/' . $artist_seo_name . '/' . $top->album_seo_name, $top->album) . '</td><td class="commentsThisMonth">' . $top->comments_all . ' comments</td></tr><tr><td colspan="2"><hr class="featuredHr" /></td></tr>');
+			
+			}
+			
+			?>
+		</table>
+	</div>
+	<div class="topAll">
+		<table class="topAllList">
+		
+			<?php
+			foreach($topAll->result() as $top)
+			{
+				echo('<tr class="topList"><td>' . anchor('songs/view/' . $artist_seo_name . '/' . $top->album_seo_name . '/' . $top->song_seo_name, $top->song) . ', on ' . anchor('albums/view/' . $artist_seo_name . '/' . $top->album_seo_name, $top->album) . '</td><td class="commentsThisMonth">' . $top->comments_all . ' comments</td></tr><tr><td colspan="2"><hr class="featuredHr" /></td></tr>');
+			
+			}
+			
+			?>
+		</table>
+	</div>	
+	<?php 
+
+	if($this->dx_auth->is_role(array('admin', 'poweruser')))
+	{
+		echo(anchor('artists/edit/' . $artist_seo_name, 'Edit ' . $artist) . "<br />");
+	}
+
+
+?>
+<script src="http://www.unravelthemusic.com/assets/js/public/jquery.form.js" type="text/javascript"></script>
